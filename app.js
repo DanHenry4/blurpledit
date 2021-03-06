@@ -18,23 +18,13 @@ app.use(cookieParser());
 // Authenticate a jwt or assign one if missing.
 app.use((req, res, next) => {
     const reqCookie = req.cookies.token;
-    if (reqCookie !== undefined) {
-        const token = reqCookie.token;
-        jwt.verify(token, accessSecret, (err, user) => {
-            if (err) {
-                return error;
-            }
-
-            req.user = user.uuid;
-        });
-    } else {
+    if (reqCookie === undefined) {
         // Setup new jwt...
-        new_uuid = uuidv4();
+        const new_uuid = uuidv4();
 
-        let expiresIn;
         const t1 = new Date().getTime();
         const t2 = new Date(2045, 1, 1, 0, 0, 0, 0).getTime();
-        expiresIn = t2 - t1;
+        const expiresIn = t2 - t1;
 
         const accessToken = jwt.sign(
             { uuid: new_uuid },
@@ -49,6 +39,15 @@ app.use((req, res, next) => {
         );
 
         req.user = new_uuid;
+    } else {
+        const token = reqCookie.token;
+        jwt.verify(token, accessSecret, (err, user) => {
+            if (err) {
+                return error;
+            }
+
+            req.user = user.uuid;
+        });
     }
     next();
 });
