@@ -1,0 +1,18 @@
+{
+    "posts": [
+        {
+            "id": 1,
+            "title": "My first post!",
+            "content": "It's not much, but it's honest work.",
+            "nsfw": true,
+            "author": "45f7d599-3652-4443-b0ac-68721cfdb7db"
+        },
+        {
+            "id": 2,
+            "title": "Legos are cool",
+            "content": "I like to build with them.",
+            "nsfw": false,
+            "author": "45f7d599-3652-4443-b0ac-68721cfdb7db"
+        }
+    ]
+}

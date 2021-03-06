@@ -1,0 +1,25 @@
+{
+  "name": "blurpledit_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest",
+    "start": "nodemon -L"
+  },
+  "author": "Dan Henry <dhenry4@gmail.com> (https://danhenry4.github.io/)",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.18",
+    "pug": "^3.0.2",
+    "uuid": "^8.3.2"
+  }
+}
