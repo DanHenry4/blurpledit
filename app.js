@@ -7,6 +7,8 @@ const accessSecret = process.env.ACCESS_TOKEN_SECRET;
 
 const { v4: uuidv4 } = require('uuid');
 
+const User = require('./models/User');
+
 const path = require('path');
 
 const mongoose = require('mongoose');
@@ -16,18 +18,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Authenticate a jwt or assign one if missing.
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     const reqCookie = req.cookies.token;
     if (reqCookie === undefined) {
         // Setup new jwt...
-        const new_uuid = uuidv4();
+        const public_uuid = uuidv4();
+        const private_uuid = uuidv4();
 
         const t1 = new Date().getTime();
         const t2 = new Date(2045, 1, 1, 0, 0, 0, 0).getTime();
         const expiresIn = t2 - t1;
 
         const accessToken = jwt.sign(
-            { uuid: new_uuid },
+            { uuid: private_uuid },
             accessSecret,
             { expiresIn: expiresIn }
         );
@@ -38,17 +41,37 @@ app.use((req, res, next) => {
             { maxAge: expiresIn, httpOnly: true }
         );
 
-        req.user = new_uuid;
-    } else {
-        const token = reqCookie.token;
-        jwt.verify(token, accessSecret, (err, user) => {
-            if (err) {
-                return error;
-            }
+        req.user = {};
+        req.user._id = private_uuid;
+        req.user.publicId = public_uuid;
+        req.user.name = public_uuid.substring(0,32); // 32 is the max length a displayname can be
+        req.user.privateMode = false;
 
-            req.user = user.uuid;
+        // Insert new user into database.
+        const newUser = new User({
+            _id: req.user._id,
+            publicId: req.user.publicId,
+            name: req.user.name
         });
+        newUser.save();
+    } else {
+        const jwtUser = jwt.verify(reqCookie.token, accessSecret, (err, user) => {
+            if (err) { res.status(403).send(err); }
+            else { return user.uuid; }
+        });
+
+        if (req.user === undefined) {
+            const userQuery = await User.findById(jwtUser, '_id publicId name');
+            req.user = JSON.stringify(userQuery);
+        }
     }
+
+    // Keep track of user on backend but mask the id of user to other users.
+    if (req.privateMode === true) {
+        req.user.displayName = 'anonymous';
+        req.user.publicId = null;
+    }
+
     next();
 });
 
@@ -57,7 +80,6 @@ app.set("view engine", "pug");
 
 // Handle Routes
 const routes = require('./routes');
-const { Recoverable } = require('repl');
 app.use('/', routes);
 
 // Connect to Database

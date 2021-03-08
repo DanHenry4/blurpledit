@@ -6,11 +6,18 @@ const UserSchema = mongoose.Schema({
         type: String,
         default: uuid.v4()
     },
+    publicId: {
+        type: String,
+        default: uuid.v4()
+    },
     name: {
         type: String,
         maxlength: [32, 'Sorry, chum. There\'s a 32 character limit at this establishment.']
     },
     posts: {
+        type: [String]
+    },
+    comments: {
         type: [String]
     },
     saved: {
