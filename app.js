@@ -1,4 +1,8 @@
-const app = require('express')();
+// TODO this file is getting a bit cumbersome.
+// Find a way to move the routes into their own file.
+
+const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
@@ -46,12 +50,14 @@ app.use(async (req, res, next) => {
         req.user.publicId = public_uuid;
         req.user.name = public_uuid.substring(0,32); // 32 is the max length a displayname can be
         req.user.privateMode = false;
+        req.user.ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
         // Insert new user into database.
         const newUser = new User({
             _id: req.user._id,
             publicId: req.user.publicId,
-            name: req.user.name
+            name: req.user.name,
+            ipAddress: req.user.ipAddress
         });
         newUser.save();
     } else {
@@ -79,8 +85,27 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 // Handle Routes
-const routes = require('./routes');
-app.use('/', routes);
+const userRouter = express.Router();
+const tagRouter = express.Router();
+const postRouter = express.Router({mergeParams: true});
+
+userRouter.use('/:userId/post', postRouter);
+tagRouter.use('/:tag/post', postRouter);
+
+userRouter.get('/', (req, res) => {
+  res.status(200).send(`Hello, users!`);
+});
+
+userRouter.get('/:userId', (req, res) => {
+  res.status(200).send(`Hello, ${req.params.userId}!`);
+});
+
+app.use('/user', userRouter);
+app.use('/tag', tagRouter);
+
+app.get('/', (req, res) => {
+  res.render('index', { title: "Home!", data: req.user });
+});
 
 // Connect to Database
 const dbuser = process.env.DB_USER;

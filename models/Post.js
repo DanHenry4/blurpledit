@@ -17,6 +17,10 @@ const PostSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    tag: {
+        type: [String],
+        maxlength: [24, 'There is a 24 character limit on tags, buddy.']
+    },
     date: {
         type: Date,
         default: Date.now
