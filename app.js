@@ -11,9 +11,11 @@ const accessSecret = process.env.ACCESS_TOKEN_SECRET;
 
 const { v4: uuidv4 } = require('uuid');
 
-const User = require('./models/User');
-
 const path = require('path');
+
+const User = require('./models/User');
+const Post = require('./models/Post');
+const findObject = require('./utils/findObject');
 
 const mongoose = require('mongoose');
 
@@ -92,12 +94,12 @@ const postRouter = express.Router({mergeParams: true});
 userRouter.use('/:userId/post', postRouter);
 tagRouter.use('/:tag/post', postRouter);
 
-userRouter.get('/', (req, res) => {
-  res.status(200).send(`Hello, users!`);
+userRouter.get('/', async (req, res) => {
+  res.status(200).json(JSON.stringify(await findObject({ Type: User })));
 });
 
-userRouter.get('/:userId', (req, res) => {
-  res.status(200).send(`Hello, ${req.params.userId}!`);
+userRouter.get('/:username', (req, res) => {
+  res.status(200).send(`Hello, ${req.params.username}!`);
 });
 
 app.use('/user', userRouter);

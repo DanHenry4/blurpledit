@@ -5,22 +5,22 @@ const UserSchema = mongoose.Schema({
     _id: {
         type: String,
         default: uuid.v4(),
-        validate: {
-            validator: (v) => {
-                return v.test(/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/);
-            },
-            message: 'That doesn\'t look like a UUID to me...'
-        }
+        // validate: {
+        //     validator: (v) => {
+        //         return v.test(/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/);
+        //     },
+        //     message: 'That doesn\'t look like a UUID to me...'
+        // }
     },
     publicId: {
         type: String,
         default: uuid.v4(),
-        validate: {
-            validator: (v) => {
-                return v.test(/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/);
-            },
-            message: 'That doesn\'t look like a UUID to me...'
-        }
+        // validate: {
+        //     validator: (v) => {
+        //         return v.test(/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/);
+        //     },
+        //     message: 'That doesn\'t look like a UUID to me...'
+        // }
     },
     name: {
         type: String,
@@ -28,16 +28,17 @@ const UserSchema = mongoose.Schema({
     },
     ipAddress: {
         type: String,
-        validate: {
-            validator: (v) => {
-                return v.test(/^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$/);
-            },
-            message: 'Your IP address is whack, yo...'
-        },
+        // validate: {
+        //     validator: (v) => {
+        //         return v.test(/^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$/);
+        //     },
+        //     message: 'Your IP address is whack, yo...'
+        // },
         required: [true, 'You honestly thought you could talk to the Internet without an IP address?']
     },
     votes: {
-        type: Number
+        type: Number,
+        default: 0
     },
     posts: {
         type: [String]

@@ -1,20 +1,7 @@
-module.exports = ({Type, id = undefined, tag = undefined}={}) => {
-  return (req, res, next, value) => {
-    Type.find(() => {
-      return { tag: tag } || { _id: id } || '*';
-    }).sort({
-      votes: '-1'
-    }).exec((err, data) => {
-      if (err) throw err;
-
-      if (data.length) {
-        res.json(data);
-      } else {
-        res.status(404);
-        res.json({ 
-          error: `Unable to find ${type} with id ${id}` 
-        });
-      }
-    });
-  };
+module.exports = p => {
+  let query;
+  if (p.tag !== undefined) query = { tag: p.tag };
+  else if (p.id !== undefined) query = { _id: p.id };
+  else query = {};
+  return p.Type.find(query).sort({ votes: '-1' }).exec();
 };
