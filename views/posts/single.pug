@@ -1,0 +1,8 @@
+extends ../layout
+
+block layout-content
+  div.view
+    h1.banner #{title}
+    div.content 
+        each val in data
+            div.postContainer= val
