@@ -6,7 +6,21 @@ html
     link(rel="shortcut icon", href="/favicon.ico")
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     meta(name="theme-color", content="#000000")
-    title #{title}
+    style 
+      include css/style.min.css
+    title #{title} - blurpledit
   body
     div#root
-      block layout-content
+      section.navbar
+        div#rootButton.rootButton 
+          a(href='/') b
+        div#searchBar.searchBar
+          form#searchForm
+            input#searchInput.searchInput(type='text')
+        div.privacyToggleContainer
+          label.toggle
+            input(type='checkbox')
+            span.slider
+      section.content
+        div#content
+          block layout-content

@@ -1,9 +1,12 @@
 extends layout
 
 block layout-content
-  div.view
-    h1.banner Here be data!
-    div.content 
-      div.user #{user}
-      each val in data
-        div.postContainer= val
+  each post in data.posts
+    div.postContainer
+      div.postContent
+        a(href='/post/' + post._id)= post.content
+      div.postReplies
+        a(href='/post/' + post._id + '/replies')= post.repliesCount + 'x replies'
+      div.postTagContainer
+        each tag in post.tags
+          a(id=tag._id,href='#')= tag.votes + 'x ' + tag.name

@@ -5,6 +5,7 @@ module.exports = (connection) => {
     const findObject = require('../utils/findObject');
 
     // Compile models.
+    //const Tag = require('../models/Tag')(connection);
     const Post = require('../models/Post')(connection);
     const User = require('../models/User')(connection);
 
@@ -63,11 +64,12 @@ module.exports = (connection) => {
     res.render('index', {
         title: "Home!",
         user: req.user,
-        data: await findObject({
-            Type: Post, 
-            maxVotes: req.query.v 
+        data: {
+            posts: await findObject({
+                Type: Post, 
+                maxVotes: req.query.v 
             })
-        });
+        }});
     });
 
     return app;

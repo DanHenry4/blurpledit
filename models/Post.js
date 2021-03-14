@@ -2,6 +2,8 @@ module.exports = (connection) => {
     const mongoose = require('mongoose');
     const Schema = mongoose.Schema;
 
+    //const Tag = connection.model('Tag').schema;
+
     const PostSchema = new Schema({
         title: {
             type: String
@@ -9,11 +11,10 @@ module.exports = (connection) => {
         content: {
             type: String
         },
-        tag: {
-            type: [String],
-            maxlength: [24, 'There is a 24 character limit on tags, buddy.']
+        tags: {
+            type: [String]
         },
-        votes: {
+        attentionUnits: {
             type: Number,
             default: 1
         },

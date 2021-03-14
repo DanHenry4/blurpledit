@@ -2,18 +2,19 @@
 A reddit clone built with ExpressJS and MongoDB.
 
 #### Installation Requirements
-1. NodeJS
-2. NPM
-3. MongoDB
-4. Docker and Docker-Compose
+- NodeJS
+- NPM
+- MongoDB
+- Docker and Docker-Compose
 
 #### Installation Instructions
 1. (Optional) Install Node and NPM
 2. Install Docker and Docker-Compose
 3. Clone repository to local folder
 4. For development, run ```npm -D install``` or ```npm install``` for production
-5. Create a docker-compose.yaml file
-6. Add the following to docker-compose.yaml, changing values as necessary
+5. Set the database uri in ```./app.js``` to your MongoDB uri
+6. Create a docker-compose.yaml file
+7. Add the following to docker-compose.yaml, changing values as necessary:
 ```
 version: "3"
 services:
